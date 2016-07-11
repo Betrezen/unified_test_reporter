@@ -1,9 +1,16 @@
+<<<<<<< HEAD
 import re
 import string
 
 import pkg_resources
 from cached_property import cached_property
 
+=======
+from cached_property import cached_property
+import re
+import string
+
+>>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d
 from unified_test_reporter.settings import logger
 
 """
@@ -25,6 +32,7 @@ STEP_NUM_PATTERN = re.compile(r'^(\d{1,3})[.].+')
 DURATION_PATTERN = re.compile(r'Duration:?\s+(\d+(?:[sm]|\s?m))(?:in)?\b')
 
 
+<<<<<<< HEAD
 class TestReporterModule(object):
 
     @property
@@ -41,11 +49,21 @@ class TestReporterModule(object):
         return '<{self.__class__.__name__} name=\'{self.name}\', enabled={self.enabled}>'.format(self=self)
 
 
+=======
+>>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d
 class BugProvider(object):
     @cached_property
     def get_bugs(self):
         raise NotImplemented
 
+<<<<<<< HEAD
+=======
+class TestResultProvider(object):
+    @cached_property
+    def get_results(self):
+        raise NotImplemented
+
+>>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d
 
 class TestCaseProvider(object):
     @cached_property
@@ -75,7 +93,10 @@ class TestCaseProvider(object):
         else:
             return False
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d
 class DocStringProvider(object):
 
     def parse_docstring(self, s, case):
@@ -182,7 +203,15 @@ class TestPublisher(object):
         raise NotImplemented
 
 
+<<<<<<< HEAD
 class TestResultProvider(object):
+=======
+class NoseTestTestResultProvider(TestResultProvider):
+    pass
+
+
+class TestResult(object):
+>>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d
     """TestResult."""  # TODO documentation
 
     def __init__(self, name, group, status, duration, url=None,
@@ -206,10 +235,13 @@ class TestResultProvider(object):
         }
         self._steps = steps
 
+<<<<<<< HEAD
     @cached_property
     def results(self):
         raise NotImplemented
 
+=======
+>>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d
     @property
     def version(self):
         # Version string length is limited by 250 symbols because field in
@@ -249,7 +281,10 @@ class TestResultProvider(object):
             'comments': self.comments
         }
         return str(result_dict)
+<<<<<<< HEAD
 
 
 class NoseTestTestResultProvider(TestResultProvider):
     pass
+=======
+>>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d

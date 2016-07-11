@@ -29,9 +29,12 @@ class LaunchpadBug(BugProvider):
                                                      '.cache')
         self.bug = self.launchpad.bugs[int(bug_id)]
 
+<<<<<<< HEAD
     def module_init(self):
         super(LaunchpadBug, self).module_init()
 
+=======
+>>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d
     @property
     def targets(self):
         return [

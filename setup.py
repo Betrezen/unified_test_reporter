@@ -27,6 +27,7 @@ setup(
     zip_safe=False,
     include_package_data=True,
     packages=find_packages(),
+<<<<<<< HEAD
     entry_points={
         'unified_test_reporter.modules': [
             'jenkins_test_results = unified_test_reporter.providers.jenkins_client:Build',
@@ -36,4 +37,6 @@ setup(
             'launchpad_bug = unified_test_reporter.providers.launchpad_client:LaunchpadBug',
         ]
     },
+=======
+>>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d
 )

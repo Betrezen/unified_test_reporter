@@ -32,7 +32,10 @@ disable_warnings()
 
 
 class Build(TestResultProvider):
+<<<<<<< HEAD
 
+=======
+>>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d
     def __init__(self, name, number='latest'):
         """Get build info via Jenkins API, get test info via direct HTTP
         request.
@@ -58,10 +61,13 @@ class Build(TestResultProvider):
         self.results = self.get_results()
         self.failures = self.get_build_failure_reasons()
 
+<<<<<<< HEAD
     def module_init(self):
         super(Build, self).module_init()
 
 
+=======
+>>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d
     def get_job_info(self, depth=1):
         job_url = "/".join([JENKINS["url"], 'job',
                             self.name,
