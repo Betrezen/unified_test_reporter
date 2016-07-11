@@ -27,17 +27,6 @@ DURATION_PATTERN = re.compile(r'Duration:?\s+(\d+(?:[sm]|\s?m))(?:in)?\b')
 
 class TestReporterModule(object):
 
-    def __init__(self, registrator, name, config):
-        super(TestReporterModule, self).__init__()
-        self.registrator = registrator
-        self.name = name
-        self.config = config
-        self.module_init()
-        self.enabled = True
-
-    def module_init(self):
-        pass
-
     @property
     def conf(self):
         return self.conf
@@ -52,77 +41,13 @@ class TestReporterModule(object):
         return '<{self.__class__.__name__} name=\'{self.name}\', enabled={self.enabled}>'.format(self=self)
 
 
-class Registrator(list):
-    modules = {}
-    _loaded_modules = False
-
-    @classmethod
-    def register(cls, name):
-        """ Decorator to register modules
-        """
-        def decorator(module_cls):
-            cls.register_module(name, module_cls)
-            return module_cls
-        return decorator
-
-    @classmethod
-    def register_module(cls, name, module_cls):
-        if issubclass(module_cls, TestReporterModule):
-            cls.modules[name] = module_cls
-            print ("register_module = {}".format(name))
-        else:
-            raise Exception('modules should be subclass of TestReporterModule')
-
-    @classmethod
-    def load_modules(cls):
-        if cls._loaded_modules:
-            return
-        # Load modules
-        for plugin in pkg_resources.iter_entry_points('unified_test_reporter.modules'):
-            try:
-                mcls = plugin.load()
-                print ("load_modules = {}".format(plugin.name))
-            except Exception as e:
-                print ('Unable to load plugin "{}" - {}'.format(plugin.name, e))
-                continue
-
-            print ("pa:{}".format(mcls.__subclasses__()))
-            if not issubclass(mcls, TestReporterModule):
-                print ('plugin "{}" is not a subclass of TestReporterModule.'.format(plugin.name))
-                continue
-            cls.register_module(plugin.name, mcls)
-        cls._loaded_modules = True
-
-    def __init__(self, modules=None, config=None):
-        list.__init__(self)
-        self.config = config
-        self.load_modules()
-
-    def create_module(self, name):
-        print self.modules
-        print self.config.get(name, {})
-        return self.modules.get(name)(self, name, self.config.get(name, {}))
-
-    def get_module_by_name(self, name):
-        for m in self:
-            if m.name == name:
-                return m
-
-    def method_as_module(self, fn):
-        module_cls = type('MethodModule', (TestReporterModule, ), {'process': staticmethod(fn)})
-        return module_cls(self, fn.__name__, self.config.get('', {}))
-
-    def on_capabilities(self, caps):
-        map(lambda a: a.on_capabilities(caps), self)
-
-
-class BugProvider(TestReporterModule):
+class BugProvider(object):
     @cached_property
     def get_bugs(self):
         raise NotImplemented
 
 
-class TestCaseProvider(TestReporterModule):
+class TestCaseProvider(object):
     @cached_property
     def get_groups(self):
         raise NotImplemented
@@ -151,7 +76,7 @@ class TestCaseProvider(TestReporterModule):
             return False
 
 
-class DocStringProvider(TestReporterModule):
+class DocStringProvider(object):
 
     def parse_docstring(self, s, case):
         split_s = s.strip().split('\n\n')
@@ -201,7 +126,7 @@ class DocStringProvider(TestReporterModule):
         return match.group(1).replace(' ', '') if match else '3m'
 
 
-class TestPublisher(TestReporterModule):
+class TestPublisher(object):
     def add_descriptions(self):
         """ Publish test case decription
         example:
@@ -257,10 +182,10 @@ class TestPublisher(TestReporterModule):
         raise NotImplemented
 
 
-class TestResultProvider(TestReporterModule):
+class TestResultProvider(object):
     """TestResult."""  # TODO documentation
 
-    def module_init(self, name, group, status, duration, url=None,
+    def __init__(self, name, group, status, duration, url=None,
                  version=None, description=None, comments=None,
                  launchpad_bug=None, steps=None):
         self.name = name

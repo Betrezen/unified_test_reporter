@@ -8,9 +8,12 @@ from unified_test_reporter.providers.providers import DocStringProvider
 from unified_test_reporter.providers.pytest_provider import PyTestTestCaseProvider
 from unified_test_reporter.providers.testrail_client import TestRailProject
 from unified_test_reporter.settings import TestRailSettings
+from unified_test_reporter.pylib.pylib import get_yaml_to_attr
+from unified_test_reporter.providers.registers import TestReporterModule
+from unified_test_reporter.providers.registers import Register
 
 
-class TestStringMethods(unittest.TestCase):
+class TestReporter(unittest.TestCase):
 
     def setUp(self):
         command_list = [
@@ -128,6 +131,16 @@ class TestStringMethods(unittest.TestCase):
                 print cases
                 self.assertNotEqual(cases, None)
 
+    def test_get_plan_proboscis(self):
+        probockis_provider = ProbockisTestCaseProvider()
+        groups = json.load(open('unified_test_reporter/pantry/groups.json'))
+        plan = probockis_provider.get_plan(groups)
+        print len(plan.tests)
+        print ((plan.tests[100].entry.parent))
+        print ((plan.tests[100].entry.parent.home.__name__))
+        print ((plan.tests[100].entry.parent.home.__doc__))
+        self.assertNotEqual(plan, None)
+
     def test_proboskis_getting_docstring(self):
         probockis_provider = ProbockisTestCaseProvider()
         groups = json.load(open('unified_test_reporter/pantry/groups.json'))
@@ -153,11 +166,45 @@ class TestStringMethods(unittest.TestCase):
                         'custom_test_case_steps': steps,
                         'duration': duration}
                 tests.append(test)
+        print len(tests)
         self.assertNotEqual(tests, [])
 
+    def test_proboskis_gettests_for_groups(self):
+        probockis_provider = ProbockisTestCaseProvider()
+        groups = json.load(open('unified_test_reporter/pantry/groups.json'))
+        tests = probockis_provider.get_tests_for_groups(groups)
+        print len(tests)
+
+    def test_proboskis_gettests_by_group(self):
+        probockis_provider = ProbockisTestCaseProvider()
+        group = {"services_ha.ceilometer": "services_ha.ceilometer"}
+        group = {"test_ibp": "test_ibp"}
+        tests = probockis_provider.get_tests_for_group(group)
+        print len(tests)
 
     def test_pytest_getting_docstring(self):
         pass
+
+    def test_registering_modules(self):
+        class App(object):
+            def __init__(self, configfile):
+                self.configfile = configfile
+                self.config = get_yaml_to_attr(self.configfile)
+                self.register = Register(config=self.config)
+
+                self.testcases = self.register.create_module('dummy_testcase_module')
+                self.register.append(self.testcases)
+
+                self.testresults = self.register.create_module('dummy_testresult_module')
+                self.register.append(self.testresults)
+
+        class DummyTestCases(TestReporterModule):
+            def module_init(self):
+                super(DummyTestCases, self).module_init()
+
+        class DummyTestresults(TestReporterModule):
+            def module_init(self):
+                super(DummyTestCases, self).module_init()
 
 if __name__ == '__main__':
     unittest.main()

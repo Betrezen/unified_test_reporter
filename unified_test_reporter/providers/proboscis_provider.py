@@ -8,6 +8,7 @@ from system_test import tests_directory
 from system_test.tests.base import ActionTest
 
 from unified_test_reporter.providers.providers import TestCaseProvider
+from unified_test_reporter.providers.providers import DocStringProvider
 from unified_test_reporter.settings import GROUP_FIELD
 from unified_test_reporter.settings import logger
 
@@ -31,6 +32,54 @@ class ProbockisTestCaseProvider(TestCaseProvider):
         for one in groups:
             register_system_test_cases(one)
         return TestPlan.create_from_registry(DEFAULT_REGISTRY)
+
+    def get_plan_by_group(self, group):
+        discover_import_tests(get_basepath(), tests_directory)
+        define_custom_groups()
+        register_system_test_cases(group)
+        return TestPlan.create_from_registry(DEFAULT_REGISTRY)
+
+    def get_tests_for_groups(self, groups):
+        tests = []
+        docstring_provider = DocStringProvider()
+        plan = self.get_plan(groups)
+        #plan.filter(group_names=groups.values())
+        for group in groups.keys():
+            #plan.filter(group_names=[group])
+            print "LEN=%s"%len(plan.tests)
+            for case in plan.tests:
+                case_name = self.get_test_case_name(case)
+                docstring = self.get_docstring(parent_home=case.entry.parent.home,
+                                               case_state=case.state,
+                                               home=case.entry.home)
+                title, steps, duration = docstring_provider.parse_docstring(docstring, case)
+                test = {'title': title,
+                        'custom_test_group':case_name,
+                        'custom_test_case_description': docstring,
+                        'custom_test_case_steps': steps,
+                        'duration': duration}
+                tests.append(test)
+        return tests
+
+    def get_tests_for_group(self, group):
+        tests = []
+        docstring_provider = DocStringProvider()
+        plan = self.get_plan_by_group(group)
+        group_val = group.values()[0]
+        plan.filter(group_names=[group_val])
+        for case in plan.tests:
+            case_name = self.get_test_case_name(case)
+            docstring = self.get_docstring(parent_home=case.entry.parent.home,
+                                           case_state=case.state,
+                                           home=case.entry.home)
+            title, steps, duration = docstring_provider.parse_docstring(docstring, case)
+            test = {'title': title,
+                    'custom_test_group':case_name,
+                    'custom_test_case_description': docstring,
+                    'custom_test_case_steps': steps,
+                    'duration': duration}
+            tests.append(test)
+        return tests
 
     def get_test_case_name(self, case):
         """Returns test case name

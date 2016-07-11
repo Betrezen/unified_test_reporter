@@ -4,6 +4,8 @@ import functools
 import hashlib
 import re
 
+import yaml
+
 MINUTE = 60
 HOUR = MINUTE ** 2
 DAY = HOUR * 8
@@ -112,3 +114,49 @@ def distance(astr, bstr):
                 change += 1
             current_row[j] = min(add, delete, change)
     return current_row[alen]
+
+class attrdict(dict):
+    """Dictionary with support for attribute syntax.
+    d = attrdict({'foo-bar':42, 'baz':777}); d.foo_bar == d['foo-bar']; d.hello = "hello"; d.hello == d['hello']
+    """
+
+    def __getattr__(self, name):
+        print name
+        try:
+            return self[name]
+        except KeyError:
+            pass
+        try:
+            return self[name.replace('_', '-')]
+        except KeyError:
+            pass
+        raise (AttributeError, 'no such attribute or key: %s' % name)
+
+    def __setattr__(self, name, value):
+        self[name] = value
+
+def copy(x):
+    """Makes a deep copy of x, replacing dict with attrdict."""
+    if isinstance(x, dict):
+        d = attrdict()
+        for k, v in x.iteritems():
+            d[copy(k)] = copy(v)
+        return d
+    elif isinstance(x, list):
+        return map(copy, x)
+    return x
+
+def copyx(x):
+    """Makes a deep copy of x, replacing attrdict with dict."""
+    if isinstance(x, attrdict):
+        d = {}
+        for k, v in x.iteritems():
+            d[copyx(k)] = copyx(v)
+        return d
+    elif isinstance(x, list):
+        return map(copy, x)
+    return x
+
+def get_yaml_to_attr(filename):
+    return copy(yaml.load(open(filename)))
+
