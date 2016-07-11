@@ -36,14 +36,8 @@ python reporter/../setup.py develop
 #python unified_test_reporter/reports/generate_failure_group_statistics.py -o /tmp/report
 #python unified_test_reporter/reports/generate_statistics.py --verbose --handle-blocked --out-file bugs_link_stat --job-name 9.0.swarm.runner --html
 #python unified_test_reporter/reports/report.py -v -j 9.0.test_all -N 500
-<<<<<<< HEAD
 #python unified_test_reporter/reports/upload_cases_description.py -v -l -j 9.0.swarm.runner -N 160
 #python unified_test_reporter/tests/clients_test.py -v TestReporter.test_proboskis_getting_docstring
-=======
-
-#not tested yet
-#python unified_test_reporter/reports/upload_cases_description.py -v -l -j 9.0.swarm.runner -N 160
->>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d
 rm reporter
 deactivate
 popd

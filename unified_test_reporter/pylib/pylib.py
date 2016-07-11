@@ -4,11 +4,9 @@ import functools
 import hashlib
 import re
 
-<<<<<<< HEAD
 import yaml
 
-=======
->>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d
+
 MINUTE = 60
 HOUR = MINUTE ** 2
 DAY = HOUR * 8
@@ -116,7 +114,6 @@ def distance(astr, bstr):
             if astr[j - 1] != bstr[i - 1]:
                 change += 1
             current_row[j] = min(add, delete, change)
-<<<<<<< HEAD
     return current_row[alen]
 
 class attrdict(dict):
@@ -163,7 +160,3 @@ def copyx(x):
 
 def get_yaml_to_attr(filename):
     return copy(yaml.load(open(filename)))
-
-=======
-    return current_row[alen]
->>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d

@@ -8,10 +8,7 @@ from system_test import tests_directory
 from system_test.tests.base import ActionTest
 
 from unified_test_reporter.providers.providers import TestCaseProvider
-<<<<<<< HEAD
 from unified_test_reporter.providers.providers import DocStringProvider
-=======
->>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d
 from unified_test_reporter.settings import GROUP_FIELD
 from unified_test_reporter.settings import logger
 
@@ -36,7 +33,6 @@ class ProbockisTestCaseProvider(TestCaseProvider):
             register_system_test_cases(one)
         return TestPlan.create_from_registry(DEFAULT_REGISTRY)
 
-<<<<<<< HEAD
     def get_plan_by_group(self, group):
         discover_import_tests(get_basepath(), tests_directory)
         define_custom_groups()
@@ -85,8 +81,6 @@ class ProbockisTestCaseProvider(TestCaseProvider):
             tests.append(test)
         return tests
 
-=======
->>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d
     def get_test_case_name(self, case):
         """Returns test case name
         """

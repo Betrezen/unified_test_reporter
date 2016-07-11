@@ -8,18 +8,12 @@ from unified_test_reporter.providers.providers import DocStringProvider
 from unified_test_reporter.providers.pytest_provider import PyTestTestCaseProvider
 from unified_test_reporter.providers.testrail_client import TestRailProject
 from unified_test_reporter.settings import TestRailSettings
-<<<<<<< HEAD
 from unified_test_reporter.pylib.pylib import get_yaml_to_attr
 from unified_test_reporter.providers.registers import TestReporterModule
 from unified_test_reporter.providers.registers import Register
 
 
 class TestReporter(unittest.TestCase):
-=======
-
-
-class TestStringMethods(unittest.TestCase):
->>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d
 
     def setUp(self):
         command_list = [
@@ -137,7 +131,6 @@ class TestStringMethods(unittest.TestCase):
                 print cases
                 self.assertNotEqual(cases, None)
 
-<<<<<<< HEAD
     def test_get_plan_proboscis(self):
         probockis_provider = ProbockisTestCaseProvider()
         groups = json.load(open('unified_test_reporter/pantry/groups.json'))
@@ -148,8 +141,6 @@ class TestStringMethods(unittest.TestCase):
         print ((plan.tests[100].entry.parent.home.__doc__))
         self.assertNotEqual(plan, None)
 
-=======
->>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d
     def test_proboskis_getting_docstring(self):
         probockis_provider = ProbockisTestCaseProvider()
         groups = json.load(open('unified_test_reporter/pantry/groups.json'))
@@ -175,7 +166,6 @@ class TestStringMethods(unittest.TestCase):
                         'custom_test_case_steps': steps,
                         'duration': duration}
                 tests.append(test)
-<<<<<<< HEAD
         print len(tests)
         self.assertNotEqual(tests, [])
 
@@ -191,15 +181,11 @@ class TestStringMethods(unittest.TestCase):
         group = {"test_ibp": "test_ibp"}
         tests = probockis_provider.get_tests_for_group(group)
         print len(tests)
-=======
         self.assertNotEqual(tests, [])
-
->>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d
 
     def test_pytest_getting_docstring(self):
         pass
 
-<<<<<<< HEAD
     def test_registering_modules(self):
         class App(object):
             def __init__(self, configfile):
@@ -221,8 +207,6 @@ class TestStringMethods(unittest.TestCase):
             def module_init(self):
                 super(DummyTestCases, self).module_init()
 
-=======
->>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d
 if __name__ == '__main__':
     unittest.main()
 

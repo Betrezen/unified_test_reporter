@@ -27,10 +27,7 @@ from unified_test_reporter.pylib.testrail import APIError
 from unified_test_reporter.settings import TestRailSettings
 from unified_test_reporter.settings import logger
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 066d4ecbbd33643da64c901fb3928f1b32af483d
 class TestRailProject(TestPublisher, TestCaseProvider,
                       TestResultProvider, BugProvider):
     """TestRailProject."""  # TODO documentation
