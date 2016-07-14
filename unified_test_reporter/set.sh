@@ -10,10 +10,40 @@ pushd . > /dev/null
 cd $VENV_DIR > /dev/null
 source bin/activate
 
+packages="python-pip python-dev python3-dev libssl-dev libpq-dev libvirt-dev"
+for item in ${packages[*]}
+do
+    found=`dpkg -l | grep $item`
+    if [ -n "$found" ]
+    then
+        echo -e "$item\t\e[1;32mOk\e[0m"
+    else
+	echo -en "$item\t\033[s\e[1;33mInstalling...\e[0m\033[u"
+	apt-get install $item > /dev/null
+	if [ $? -eq 0 ]
+	then
+            echo -e "\033[u\e[1;32mInstalled    \e[0m"
+	else
+    	    echo -e "\e[1;31mInstallation failed\e[0m"
+    	    exit 1
+	fi
+    fi
+done
+
 pwd
 
 CUR_DIR=$(pwd)
-FUELQA_DIR=/home/krozin/@Git/MIRANTIS/fuel-qa
+#FUELQA_DIR=/home/user/fuel-qa
+if env | grep -q ^FUELQA_DIR
+then
+    echo -e "Warning: System variable FUELQA_DIR is not set!"
+else
+    if ! [ -d $FUELQA_DIR ];
+    then
+        echo -e "\e[1;31mWarning: Value of system variable FUELQA_DIR is wrong!\nNo directory $FUELQA_DIR"
+    fi
+fi
+
 export PYTHONPATH="${PYTHONPATH}:$CUR_DIR:$FUELQA_DIR"
 export JENKINS_URL=https://product-ci.infra.mirantis.net
 export TESTRAIL_URL=https://mirantis.testrail.com
@@ -28,7 +58,7 @@ export LAUNCHPAD_MILESTONE=9.0
 export USE_UBUNTU='true'
 
 ln -s $CODE_DIR/unified_test_reporter reporter
-pip install -r reporter/requirements.txt > /dev/null
+pip install -r reporter/../requirements.txt > /dev/null
 python reporter/../setup.py develop
 
 # -------------- EXAMPLES -----------------
