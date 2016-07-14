@@ -10,6 +10,26 @@ pushd . > /dev/null
 cd $VENV_DIR > /dev/null
 source bin/activate
 
+packages="python-pip python-dev python3-dev libssl-dev libpq-dev libvirt-dev"
+for item in ${packages[*]}
+do
+    found=`dpkg -l | grep $item`
+    if [ -n "$found" ]
+    then
+    echo -e "$item\t\e[1;32mOk\e[0m"
+    else
+    echo -en "$item\t\033[s\e[1;33mInstalling...\e[0m\033[u"
+    apt-get install $item > /dev/null
+    if [ $? -eq 0 ]
+    then
+        echo -e "\033[u\e[1;32mInstalled    \e[0m"
+    else
+        echo -e "\e[1;31mInstallation failed\e[0m"
+        exit 1
+    fi
+    fi
+done
+
 pwd
 
 CUR_DIR=$(pwd)
