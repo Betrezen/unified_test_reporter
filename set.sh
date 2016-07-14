@@ -16,6 +16,7 @@ do
     found=`dpkg -l | grep $item`
     if [ -n "$found" ]
     then
+<<<<<<< HEAD
         echo -e "$item\t\e[1;32mOk\e[0m"
     else
 	echo -en "$item\t\033[s\e[1;33mInstalling...\e[0m\033[u"
@@ -27,6 +28,19 @@ do
     	    echo -e "\e[1;31mInstallation failed\e[0m"
     	    exit 1
 	fi
+=======
+    echo -e "$item\t\e[1;32mOk\e[0m"
+    else
+    echo -en "$item\t\033[s\e[1;33mInstalling...\e[0m\033[u"
+    apt-get install $item > /dev/null
+    if [ $? -eq 0 ]
+    then
+        echo -e "\033[u\e[1;32mInstalled    \e[0m"
+    else
+        echo -e "\e[1;31mInstallation failed\e[0m"
+        exit 1
+    fi
+>>>>>>> b14b6099615ae74dac4bf01dce9acbb866e5bab9
     fi
 done
 
