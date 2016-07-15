@@ -16,7 +16,6 @@ do
     found=`dpkg -l | grep $item`
     if [ -n "$found" ]
     then
-<<<<<<< HEAD
         echo -e "$item\t\e[1;32mOk\e[0m"
     else
 	echo -en "$item\t\033[s\e[1;33mInstalling...\e[0m\033[u"
@@ -28,33 +27,19 @@ do
     	    echo -e "\e[1;31mInstallation failed\e[0m"
     	    exit 1
 	fi
-=======
-    echo -e "$item\t\e[1;32mOk\e[0m"
-    else
-    echo -en "$item\t\033[s\e[1;33mInstalling...\e[0m\033[u"
-    apt-get install $item > /dev/null
-    if [ $? -eq 0 ]
-    then
-        echo -e "\033[u\e[1;32mInstalled    \e[0m"
-    else
-        echo -e "\e[1;31mInstallation failed\e[0m"
-        exit 1
-    fi
->>>>>>> b14b6099615ae74dac4bf01dce9acbb866e5bab9
     fi
 done
 
 pwd
 
 CUR_DIR=$(pwd)
-#FUELQA_DIR=/home/user/fuel-qa
-if env | grep -q ^FUELQA_DIR
+if ! env | grep -q ^FUELQA_DIR=
 then
-    echo -e "Warning: System variable FUELQA_DIR is not set!"
+    echo -e "\e[1;33mWarning: Environmental variable FUELQA_DIR is not set!\e[0m"
 else
     if ! [ -d $FUELQA_DIR ];
     then
-        echo -e "\e[1;31mWarning: Value of system variable FUELQA_DIR is wrong!\nNo directory $FUELQA_DIR"
+        echo -e "\e[1;33mWarning: Value of environmental variable FUELQA_DIR is wrong!\nNo directory $FUELQA_DIR\e[0m"
     fi
 fi
 
@@ -72,8 +57,8 @@ export LAUNCHPAD_MILESTONE=9.0
 export USE_UBUNTU='true'
 
 ln -s $CODE_DIR/unified_test_reporter reporter
-pip install -r reporter/../requirements.txt > /dev/null
-python reporter/../setup.py develop
+pip install -r reporter/requirements.txt > /dev/null
+python reporter/setup.py develop
 
 # -------------- EXAMPLES -----------------
 #pass
